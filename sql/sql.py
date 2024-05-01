@@ -1,9 +1,11 @@
 import sqlite3
 
+# connect to the database
 def connect_to_database():
     conn = sqlite3.connect(r'C:\Users\Jonah West\Softwares\week1\moviesdb')
     return conn
 
+#  create a new table in the database called 'Movies' with columns for title, director and year of release
 def update_movie_title(movie_id, new_title):
     conn = connect_to_database()
     cursor = conn.cursor()
@@ -11,6 +13,7 @@ def update_movie_title(movie_id, new_title):
     conn.commit()
     conn.close()
 
+# delete movies  from the database based on their id number
 def delete_movie(movie_id):
     conn = connect_to_database()
     cursor = conn.cursor()
@@ -42,21 +45,21 @@ movies_data = [
     ('Schindler\'s List', '1993-12-15', 'Steven Spielberg', 'Biography')
 ]
 
+#  use execute method of the cursor object to insert records
 cursor.executemany('''
     INSERT INTO Movies (title, release_date, director, genre) VALUES (?, ?, ?, ?)
 ''', movies_data)
 
-# Commit the transaction
-conn.commit()
+conn.commit() # commit the transaction
 
-# Create Directors table
+# create Directors table
 cursor.execute('''CREATE TABLE IF NOT EXISTS Directors (
                        director_id INTEGER PRIMARY KEY,
                        name TEXT
 )''')
 
-# Insert data into Directors table
-directors_data = [
+# insert data into Directors table
+directors_data = [   
     ('Frank Darabont',),
     ('Francis Ford Coppola',),
     ('Christopher Nolan',),
@@ -64,21 +67,22 @@ directors_data = [
     ('Steven Spielberg',)
 ]
 
+# insert  records using executor method of the cursor object with a tuple containing the query and the record
 cursor.executemany('''
     INSERT INTO Directors (name) VALUES (?)
 ''', directors_data)
 
-# Perform a join between Movies and Directors tables
+# perform a join between Movies and Directors tables
 cursor.execute('''
     SELECT Movies.title, Directors.name 
     FROM Movies 
     INNER JOIN Directors ON Movies.director = Directors.name
-''')
+''') 
 
-# Fetch and display the joined data
-joined_data = cursor.fetchall()
+# fetch and display the joined data
+joined_data = cursor.fetchall() 
 for row in joined_data:
     print(row)
 
-# Close the database connection
+ # close the database connection
 conn.close()
