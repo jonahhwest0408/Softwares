@@ -5,7 +5,7 @@ def connect_to_database():
     conn = sqlite3.connect(r'C:\Users\Jonah West\Softwares\week1\moviesdb')
     return conn
 
-#  create a new table in the database called 'Movies' with columns for title, director and year of release
+# create a new table in the database called 'Movies' with columns for title, director and year of release
 def update_movie_title(movie_id, new_title):
     conn = connect_to_database()
     cursor = conn.cursor()
@@ -21,13 +21,13 @@ def delete_movie(movie_id):
     conn.commit()
     conn.close()
 
-# Connect to the database
+# connect to the database
 conn = sqlite3.connect(r'C:\Users\Jonah West\Softwares\week1\moviesdb')
 
-# Create a cursor object
+# create a cursor object
 cursor = conn.cursor()
 
-# Execute the CREATE TABLE command for Movies table
+# execute the CREATE TABLE command for Movies table
 cursor.execute('''CREATE TABLE IF NOT EXISTS Movies (
                        movie_id INTEGER PRIMARY KEY,
                        title TEXT,
@@ -36,16 +36,22 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS Movies (
                        genre TEXT
 )''')
 
-# Insert data into the Movies table
+# insert data into the Movies table
 movies_data = [
     ('The Shawshank Redemption', '1994-10-14', 'Frank Darabont', 'Drama'),
     ('The Godfather', '1972-03-24', 'Francis Ford Coppola', 'Crime'),
     ('The Dark Knight', '2008-07-18', 'Christopher Nolan', 'Action'),
     ('Pulp Fiction', '1994-10-14', 'Quentin Tarantino', 'Crime'),
-    ('Schindler\'s List', '1993-12-15', 'Steven Spielberg', 'Biography')
+    ('Schindler\'s List', '1993-12-15', 'Steven Spielberg', 'Biography'),
+    ('Inception', '2010-07-16', 'Christopher Nolan', 'Action'),
+    ('The Matrix', '1999-03-31', 'Lana Wachowski, Lilly Wachowski', 'Action'),
+    ('Forrest Gump', '1994-07-06', 'Robert Zemeckis', 'Drama'),
+    ('The Lord of the Rings: The Return of the King', '2003-12-17', 'Peter Jackson', 'Adventure'),
+    ('Fight Club', '1999-10-15', 'David Fincher', 'Drama'),
+    ('Transformers', '2007-07-03', 'Michael Bay', 'Action')
 ]
 
-#  use execute method of the cursor object to insert records
+# use execute method of the cursor object to insert records
 cursor.executemany('''
     INSERT INTO Movies (title, release_date, director, genre) VALUES (?, ?, ?, ?)
 ''', movies_data)
@@ -64,10 +70,16 @@ directors_data = [
     ('Francis Ford Coppola',),
     ('Christopher Nolan',),
     ('Quentin Tarantino',),
-    ('Steven Spielberg',)
+    ('Steven Spielberg',),
+    ('Christopher Nolan',), 
+    ('Lana Wachowski',),
+    ('Robert  Zemeckis',),
+    ('Peter Jackson',),
+    ('David Fincher',),
+    ('Michael Bay',)
 ]
 
-# insert  records using executor method of the cursor object with a tuple containing the query and the record
+# insert records using executor method of the cursor object with a tuple containing the query and the record
 cursor.executemany('''
     INSERT INTO Directors (name) VALUES (?)
 ''', directors_data)
@@ -84,5 +96,5 @@ joined_data = cursor.fetchall()
 for row in joined_data:
     print(row)
 
- # close the database connection
+# close the database connection
 conn.close()
